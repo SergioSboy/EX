@@ -26,7 +26,7 @@ defmodule Birthdays.Server do
     curent_state
   end
 
-  defp process_message(current_state, { :remove, caller, name }) do
+  defp process_message(current_state, { :remove, name }) do
     current_state |> Map.delete(name)
   end
 end
@@ -58,3 +58,7 @@ defmodule Birthdays.Client do
 
   end
 end
+
+Birthdays.Server.run
+
+Birthdays.Client.all |> IO.inspect
