@@ -1,8 +1,9 @@
 defmodule GameOfStones.Server do
   use GenServer
 
-  def init(:started, stones_num) do
+  alias GameOfStones.Impl
 
+  def init(:started, stones_num) do
     # :started
 
     # :game_in_progress
@@ -16,8 +17,17 @@ defmodule GameOfStones.Server do
     {:reply, {player, current_stones}, {player, current_stones, :game_in_progress}}
   end
 
+  def handle_call({:take, num_stones}, _, {player, current_stones, game_in_progress}) do
+    Impl.do_take({player, num_stones, current_stones})
+  end
+
+  def terminate(reason, state) do
+    IO.inspect(reason)
+    IO.inspect(state)
+    "See yo soon!" |> IO.puts()
+  end
+
   # def handle_cast(request, state) do
   #   {:noreply, new_state}
   # end
-
 end
