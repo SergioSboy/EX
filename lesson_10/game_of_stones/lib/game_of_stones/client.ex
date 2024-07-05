@@ -1,6 +1,29 @@
 defmodule GameOfStones.Client do
   @server GameOfStones.Server
 
+  def main(argv) do
+    parse(argv) |> set_initial_stones()
+    next_turn()
+  end
+
+  defp set_initial_stones(stones_to_set) do
+    case GenServer.call(@server, {:set, stones_to_set}) do
+      {:stones_set, player, num_stones} ->
+        IO.puts("Welcome!")
+
+      {:error, reason} ->
+        IO.puts("\nThere was an error: #{reason}")
+        exit(:normal)
+    end
+  end
+
+  defp parse(arguments) do
+    {opts, _, _} = OptionParser.parse(arguments, switches: [stones: :integer])
+    opts |> Keyword.get(
+      :stones,
+      Application.get_env(:game_of_stones, :default_stones)
+      )
+  end
 
   defp next_turn do
     case GenServer.call(@server, {:take, ask_stones()}) do
