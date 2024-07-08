@@ -33,6 +33,10 @@ defmodule Zoo do
     def reduce(%Zoo{animals: [head | tail]}, {:cont, acc}, fun) do
       reduce(%Zoo{animals: tail}, fun.(head, acc), fun)
     end
+
+    def slice(_) do
+      {:error, __MODULE__}
+    end
   end
 end
 
